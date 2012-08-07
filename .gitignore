@@ -2,3 +2,7 @@
 **.o
 **.elf
 **.DS_Store
+**.hex
+**.lss
+**.map
+**.sym
