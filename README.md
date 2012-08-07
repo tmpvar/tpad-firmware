@@ -1,9 +1,9 @@
 
 # tpad firmware
 
-So you want to hack on the tpad's firmware! No? well then you are probably just trying to flash the latest firmware.  You can do that with the `tpad` command. See: http://github.com/tmpvar/tpad/ for instructions.
+So you want to hack on the tpad's firmware! No? well then you are probably just trying to flash the latest firmware.  You can do that with the `tpad flash` command. See: http://github.com/tmpvar/tpad/ for instructions.
 
-It's really a painless process, I promise!
+Either way, it's really a painless process, I promise!
 
 ## Prerequisites
 
