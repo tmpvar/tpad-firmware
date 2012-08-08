@@ -12,6 +12,8 @@
 #include <stdlib.h>
 
 
+uint8_t bootloader_force;
+
 /** LUFA CDC Class driver interface configuration and state information. This structure is
  *  passed to all CDC Class driver functions, so that multiple instances of the same class
  *  within a device can be differentiated from one another.
@@ -83,7 +85,11 @@ char colorBuffer[8];
 void parseChunk(uint16_t byte) {
   char current = (char)byte;
 
-  if (current == ',' || current == '\n') {
+  if (current == '!') {
+    bootloader_force = 0xbb;
+    wdt_enable(WDTO_250MS);
+    for (;;);
+  } else if (current == ',' || current == '\n') {
     ParserState[parserPos] = atoi(colorBuffer);
 
     memset(colorBuffer, 0, sizeof(colorBuffer));
@@ -113,11 +119,33 @@ void parseChunk(uint16_t byte) {
   }
 }
 
+/*
+
+  Allow a reset into the bootloader
+
+*/
+void __bootloader_test(void)
+        __attribute__ ((naked))
+        __attribute__ ((section (".init0")));
+void __bootloader_test(void)
+{
+        __asm volatile ("    lds r24, bootloader_force\n"
+                        "    cpi r24, 0xbb\n"
+                        "    brne 1f\n"
+                        "    ldi r25, 0x00\n"
+                        "    sts bootloader_force, r25\n"
+                        "    ret\n"
+                        "1:\n"
+                        : : : "memory");
+}
+
+
 /** Main program entry point. This routine contains the overall program flow, including initial
  *  setup of all components and the main program loop.
  */
 int main(void)
 {
+
   SetupHardware();
   uint16_t bytesAvailable;
 
