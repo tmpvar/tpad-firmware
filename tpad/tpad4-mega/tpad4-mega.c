@@ -121,7 +121,10 @@ void parseChunk(uint16_t byte) {
 
 /*
 
-  Allow a reset into the bootloader
+  Allow a reset into the (adafruit CDC) bootloader
+
+  + CDC bootloader source https://github.com/adafruit/lufa-lib/blob/master/trunk/Bootloaders/CDC/BootloaderCDC.c#L139-142
+  + source of this code https://groups.google.com/d/topic/lufa-support/-w1pP0K3Elk/discussion
 
 */
 void __bootloader_test(void)
@@ -168,7 +171,7 @@ int main(void)
     if (connected && !wasConnected) {
       wasConnected = true;
       fputs("tpad\n", &USBSerialStream);
-      fputs("{\"name\": \"tpad4-mega\", \"version\":\"0.0.1\", \"leds\":true, \"pads\" : 4 }\n", &USBSerialStream);
+      fputs("{\"name\": \"tpad4-mega\", \"version\":\"0.0.1\", \"leds\":true, \"pads\" : 4, \"version\" : \"0.0.2\" }\n", &USBSerialStream);
     } else if (!connected && wasConnected) {
 
       // reset colors
